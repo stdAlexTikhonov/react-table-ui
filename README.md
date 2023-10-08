@@ -1,2 +1,2 @@
-# react-table-ui
+# react-tanstack-table-ui
 easy-to-use react-table ui library
