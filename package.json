@@ -1,6 +1,6 @@
 {
   "name": "react-tanstack-table-ui",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "easy-to-use react-table ui library",
   "main": "./dist/index.js",
   "scripts": {
