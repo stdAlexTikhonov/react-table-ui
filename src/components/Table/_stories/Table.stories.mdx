@@ -10,275 +10,218 @@ import {
     design: {
       type: 'figma',
       url: 'https://www.figma.com/file/Vp0QCIYWhOb4zHMUsiMskE/DS2.0-Table?node-id=101%3A52228&t=65Qn53DlL4cKr5R0-0'
-    },
-    jest: ['Table.test.tsx']
+    }
   }}
 />
 
-# Table
+###  Базовый компонент таблицы
 
+  Для того чтобы вывести простую таблицу достаточно задать параметры data и columns
 
-### Объект Table
+###  Таблица с объединением ячеек по вертикали
 
-Объект <b>Table</b> это объект конфигурации таблицы. Этот объект можно создать руками, так же можно воспользоваться хуком `useTable`. В случае использования хука минимальное необходимые свойства которые нужно передать в объект: columns - колонки; data - строки; Формат этих параметров смотрите далее в разделе - <b>Пример генерации данных</b>.
+  Для объединения ячеек по вертикали укажите в свойстве compound идентификатор колонки ячейки котоой хотите объединить. Таблица объединит ячейки идущие друг за
+  другом 
+  если значения будут повторяться.
+  Если вы хотите объединить ячейки в нескольких колонках укажите в compound массив с идентификаторами колонок.
+  Если вы хотите включить объединение во всех колонках - укажите compound: true
+  
+  Примеры значений:
+   - compound: true
+   - compound: 'brigadier-0'
+   - compound: ['status-0', 'progress-0']
 
-<Source
-  dark
-  code={`
-const table = useTable({ data, columns });
-  `}
-/>
+###  Таблица с редактируемыми полями
 
-### Пример генерации данных
+  Для включения возможности изменения, выделения, копирования и вставки укажите meta свойство editable
+  
+  Пример:
+   - meta: { editable: true }
 
-Данные из примера будут применяться далее для демонстрации всех возможностей компонента
+###  Таблица с расрывающимися строками 
 
-<Source
-  dark
-  code={`
-export enum Status {
-  FORMING = 'формирование',
-  PRODUCED = 'предъявлено',
-  CERTIFIED = 'выпущен сертификат'
-}\n
-export type Formation = {
-  formationNum: number,
-  brigadier: string,
-  shift: number,
-  visits: number,
-  progress: string,
-  status: Status,
-  subRows?: Formation[]
-};\n
-export const columns = [
-  { accessorKey: 'formationNum' },
-  { accessorKey: 'brigadier' },
-  { accessorKey: 'shift' },
-  { accessorKey: 'visits' },
-  { accessorKey: 'status' },
-  { accessorKey: 'progress' }
-];\n
-const brigadiers = [ 'Иванов Крилл Федорович', 'Петров Семён Олегович', 'Олегов Борис Петрович',
-'Федоров Сергей Иванович', 'Суркова Ольга Ивановна', 'Сергев Фёдор Кириллович',
- 'Борисов Олег Семёнович', 'Семёнов Пётр Босрисович', 'Кириллов Иван Сергеевич' ];\n
-const numGenerate = (num: number) => Math.floor(Math.random() \* num) + 1;\n
-const newFormation = (): Formation => ({
-  formationNum: numGenerate(100),
-  brigadier: brigadiers[numGenerate(8)],
-  shift: numGenerate(40),
-  visits: numGenerate(1000),
-  progress: numGenerate(100).toFixed(2),
-  status: [Status.FORMING, Status.PRODUCED, Status.CERTIFIED][numGenerate(2)]
-});
-\n
-export const makeData = (len: number) => {
-  return Array(len)
-    .fill(0)
-    .map((): Formation => {
-      return {
-        ...newFormation()
-      };
-    });
-};
-`}
-/>
+  Для включения этой функции необходимо:
+   - Указать enableExpanding: true
+   - В структуре data, в объекте строки, которая должна раскрываться, добавить поле которое будет отвечать за вложенные данные в данном примере subRows, и
+     передать этому полю значением массив схожий семантически с родительским объектом/массивом
+   - Задать свойсто getSubRows: (row: Row) => row.subRows - функция к которой обращается таблица для получения подстрок. Функция должна возвращать значение поля
+     содержащего подстроки(массив) каждой строки.
+   - Переопределить параметр cell в конфигурации колонок у колонки ячейки которой будут отвечать за раскрытие строк
 
-### Таблица по умолчанию
+###  Таблица с фильтрацией
 
-<Source
-  dark
-  code={`
-export const Example = () => {
-  const data = makeData(5);
-  const table = useTable<Formation>({ data, columns });
-  return (
-    <Table.Root>
-      <Table.TableComponent table={table} />
-    </Table.Root>
-  );
-}
-`}
-/>
+  Для того чтобы включить фильтрацию задайте свойство
+  
+   - enableColumnFilters: true
+  
+  Фильтры добавятся для всех колонок
+  
+  Если необходимо отключить фильтры на некоторых из них, в конфигурации колонок можно задать
+  
+   - enableColumnFilter: false
+  
+  для отдельной колонки
 
-### Footer
+###  Таблица с фильтрацией с запросами на бэкенд
 
-Для того чтобы включить футер, укажите в мета параметрах { ... enableFooter: true ...}. Контент который будет показываться в конкретной ячейке футера определяется вместе с колонками через параметр `footer:`, пример определения выше. Разработан базовый компонент `FooterCell` - по умолчанию он выводит сумму всех значений числовой колонки. Доступен через `Table.FooterCell`.
+  Для того чтобы включить фильтрацию задайте свойство
+  
+   - enableColumnFilters: true
+  
+  Для того чтобы изменения в фильтрах отправляли запрос на бэкенд воспользуйтесь методом onFilterChange
+  
+   - meta: { onFilterChange: ({ id, mode, value}: FilterState) => {} }
+  
+  Для работы с множественным выбором и добавления подсказок при подключение бэкенд задайте метод loadUniqueValues
+  
+   - meta: { loadUniqueValues: (column: string) => {} }
+  
+  метод loadUniqueValues должен возвращать уникальные значения для колонок.
 
-<Source
-  dark
-  code={`
-const table = useTable({ ... meta: { ... enableFooter: true }});
+###  Таблица с футером
 
-<Table.Root>
-  <Table.TableComponent table={table} />
-</Table.Root>
-`}
-/>
+  Для того чтобы добавить футер используйте свойство meta: { enableFooter }
+  
+  Для числовых колонок автоматически будет показываться сумма значений колонки.
+  
+  В футере можно вывести свой текст или элемент воспользовавшись свойством footer в конфигурации колонок.
+  
 
-### Table.RowSelection
+###  Таблица с глобальным поиском
 
-Включает в таблице возможность выбора строки. { enableRowSelection: true }
+  Глобальный поиск реализован через компонент Table.GlobalFilter который параметром принимает объект table
 
-<Source
-  dark
-  code={`
-<Table.Root>
-  <Table.TableComponent table={table} />
-</Table.Root>
-`}
-/>
+###  Таблица с группировкой колонок
 
-### Таблица с множественным выбором
-
- { enableMultiRowSelection: true }
-
-<Source
-  dark
-  code={`
-<Table.Root>
-  <Table.TableComponent table={table} />
-</Table.Root>
-`}
-/>
-
-
-### Table.Editable + Выбор диапазона ячеек (копировать/вставить)
-
-Для выбора диапазона ячеек зажмите курсор над ячейкой, переместите мышь до другой, и отпустите клавишу. Ячейки подсвеченые зелёным входят в диапазон. Выбор диапазона ячеек работает по умолчанию во всех таблицах.
-
-Для того чтобы скопировать выбранный диапазон, зажмите правую кнопку мыши и выберите "Копировать" - данные скопируются в буфер; Для того чтобы вставить - пункт меню "Вставить" соответственно.
-
-<Source
-  dark
-  code={`
-const [data, setData] = useState(makeData(5));\n
-const table = useTable<Formation>({
-  ...
-  data: data,
-  meta: { updateData: setData, editable: true }
-});\n
-<Table.Root>
-  <Table.TableComponent table={table} />
-</Table.Root>
-`}
-/>
-
-### Table.Pagination
-
-<Source
-  dark
-  code={`
-const table = useTable<Formation>({
-  ...
-  mata: {
-    ...
-    pagination: true
-  }
-});\n
-<Table.Root>
-  <Table.TableComponent table={table} />
-</Table.Root>
-`}
-/>
-
-### Таблица с группировкой колонок
-
-
-<Source
-  dark
-  code={`
-const columnsWithGroups = [
+  В конфигурации колонок у каждой колонки можно задать свойство columns которое так же принимает массив колонок.
+  
   {
-    id: 'hello',
-    header: () => <span>Первый уровень</span>,
-    columns: [
-      {
-        accessorKey: 'formationNum',
-        header: 'Формировочная'
-      },
-      {
-        accessorKey: 'brigadier',
-        header: () => <span>Бригадир</span>
-      }
-    ]
-  },
+     id: 'column1',
+     columns: [
+       {
+         id: 'inner-column-1'
+       },
+       {
+         id: 'inner-column-1'
+       }
+     ]
+   },
+
+###  Таблица с группировкой колонок и включеной виртуализацией
+
+  В конфигурации колонок у каждой колонки можно задать свойство columns которое так же принимает массив колонок.
+  
   {
-    header: 'Первый уровень',
-    columns: [
-      {
-        accessorKey: 'shift',
-        header: () => 'Смена'
-      },
-      {
-        header: 'Второй уровень',
-        columns: [
-          {
-            accessorKey: 'visits',
-            header: () => <span>Визиты</span>
-          },
-          {
-            accessorKey: 'status',
-            header: 'Статус'
-          },
-          {
-            accessorKey: 'progress',
-            header: 'Прогресс'
-          }
-        ]
-      }
-    ]
-  }
-];\n
-const table = useTable<Formation>({
-  ...
-  columns: columnsWithGroups,
-  ...
-});\n
-return (
-  <Table.Root>
-    <Table.TableComponent table={table} />
-  </Table.Root>
-);
-`}
-/>
+     id: 'column1',
+     columns: [
+       {
+         id: 'inner-column-1'
+       },
+       {
+         id: 'inner-column-1'
+       }
+     ]
+   },
+  
+  Чтобы включить горизонтальную виртуализацию:
+   - meta: { enableColumnVirtualization: true }
+  
+  Вертикальную:
+   - meta: { enableRowVirtualization: true }
+  
 
-### Таблица с фильтрами по колонкам
+###  Таблица с динамической подгрузкой
 
-Фильтры включаются через объект конфигурации `table = { ... enableColumnFilters: true, enableGlobalFilter: true ... }`.
+  
+  Данный пример реализован с применением библиотеки @tanstack/react-query
+ 
+  Взаимодействие таблицы и хука useInfiniteQuery происходит через:
+   - ref ссылку на компонент таблицы
+   - контролируемое состояние SortingState
+   - контролируемое состояние PaginationState
+   - метод onScroll компонента таблицы
+   - enableRowVirtualization: true
+   - pageCount
+  
+  
+  Пример минимальной конфигурации:
+   columns: columns
+   state: {
+     sorting,
+     pagination
+   },
+   pageCount,
+   onSortingChange: setSorting,
+   onPaginationChange: setPagination,
+   data: flatData,
+   meta: {
+     enableRowVirtualization: true,
+   }
+  
+  Параметры которые необходимо передать в Table.Component
+   - onScroll
+   - ref
+   - loading
+  
+  
+  Смотрите в примере
+  
+/
 
-<Source
-  dark
-  code={`
-<Table.Root>
-  <Table.TableComponent table={table} />
-</Table.Root>
-`}
-/>
+###  Таблица с контролируемой пагинацией
 
+  Для того чтобы включить контролируемую пагинацию
+   
+   - manualPagination: true,
+   - pageCount - общее количество страниц
+  
+  Создайте стейт пагинации
+    - const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 20 });
+  
+  И свяжите его с таблицей 
+   - state: { pagination } 
+   - onPaginationChange: setPagination
+  
+/
 
-Есть возможность включить глобальный фильтр. Он добавится в тулбаре, поэтому не забываем включить тулбар.
+###  Таблица с множественным выбором
 
-<Source
-  dark
-  code={`
-<Table.Root>
-  <div>
-    <Table.GlobalFilter />
-  </div>
-  <Table.TableComponent table={table} />
-</Table.Root>
-`}
-/>
+  
+  Импортируйте метод getMultipleSelect из библиотеки и добавте результат выполнения этой функции в колонки
+  
+   - const multipleSelect = getMultipleSelect();
+   - columns: [multipleSelect, ...columns]
+  
+  Включите выбор строки
+   
+   - enableRowSelection: true
+  
 
-### Таблица с фильтрами по колонкам + интеграция backend
+###  Таблица с пагинацией
 
-Для интеграции с backend предусмотрен метод `onFilterChange`. Для работы подсказок и множественного выбора необходимо добавить асинхронный метод `loadUniqueValues` `table = { ... enableColumnFilters: true, meta: { onFilterChange: ({id, mode, value }) => { ... }, loadUniqueValues: (columnId) => Promise<...> } ... }`.
+  Для того чтобы включить пагинацию добавьте мета свойство pagination
+  
+   - meta: { pagination: true }
+  
 
-<Source
-  dark
-  code={`
-<Table.Root>
-  <Table.TableComponent table={table} />
-</Table.Root>
-`}
-/>
+###  Таблица с возможностью выбора строки
+
+  Для того чтобы включить выбор строки включите свойство enableRowSelection
+  
+   - enableRowSelection: true
+  
+  Есть возможноть контролиовать выбор через state и onRowSelectionChange
+  
+   - const [selection, setSelection] = useState({})
+  
+   - state: { rowSelection: selection }
+   - onRowSelectionChange: setSelection
+  
+
+###  Таблица с виртуализацией
+
+  Виртуализация может быть как горизонтальная, так и вертикальная для включения используйте:
+  
+   - meta: { enableRowVirtualization: true } - для вертикальной
+   - meta: { enableColumnVirtualization: true } - для горизонтальной
+  

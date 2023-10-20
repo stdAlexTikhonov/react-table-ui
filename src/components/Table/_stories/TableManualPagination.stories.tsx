@@ -1,24 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import { Table, useTable, columns } from '../../..';
-import { PaginationState, SortingState } from '@tanstack/react-table';
-import { fetchData, delay } from '../../utils';
-import { Formation } from '@components/Table/types';
+import React, { RefObject, useRef, useState, useEffect, useMemo } from 'react';
 
-/*
- * Таблица с контролируемой пагинацией
- * Для того чтобы включить контролируемую пагинацию
- *  
- *  - manualPagination: true,
- *  - pageCount - общее количество страниц
- * 
- * Создайте стейт пагинации
- *   - const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 20 });
- * 
- * И свяжите его с таблицей 
- *  - state: { pagination } 
- *  - onPaginationChange: setPagination
- * 
-*/
+import Table, {
+  makeData,
+  useTable,
+  expandedColumns,
+  columns,
+  FilterState,
+  columnGroups,
+  columnGroupsVirtualization,
+  SortingState,
+  PaginationState,
+  columnsEn
+} from '../index';
+
+import { Formation, FormationApiResponse } from '../types';
+import { QueryClient, QueryClientProvider, useInfiniteQuery } from '@tanstack/react-query';
+import { fetchData, delay, getMultipleSelect } from '../utils';
+
+
+export default {
+  title: 'Table/Table/Stories',
+  parameters: {
+    chromatic: { disableSnapshot: true },
+  }
+};
+
 const useQuery = ({ pageIndex, pageSize }: PaginationState, sorting: SortingState) => {
   const [rows, setRows] = useState<Formation[]>([]);
   const [loading, setLoading] = useState(false);
@@ -41,6 +47,21 @@ const useQuery = ({ pageIndex, pageSize }: PaginationState, sorting: SortingStat
   return { rows, pageCount, loading, error };
 }
 
+/*
+ * Таблица с контролируемой пагинацией
+ * Для того чтобы включить контролируемую пагинацию
+ *  
+ *  - manualPagination: true,
+ *  - pageCount - общее количество страниц
+ * 
+ * Создайте стейт пагинации
+ *   - const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 20 });
+ * 
+ * И свяжите его с таблицей 
+ *  - state: { pagination } 
+ *  - onPaginationChange: setPagination
+ * 
+*/
 export const TableManualPagination = () => {
   
   const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 20 });
@@ -63,3 +84,5 @@ export const TableManualPagination = () => {
     <Table.TableComponent table={table} height={500} loading={loading} errorText={error} width={'100%'} />
   </Table.Root>
 };
+TableManualPagination.storyName = 'Таблица TableManualPagination';
+

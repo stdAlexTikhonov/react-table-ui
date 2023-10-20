@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { Table, makeData, useTable, columns } from '../../..';
 
+/*
+ * Таблица с глобальным поиском
+ * Глобальный поиск реализован через компонент Table.GlobalFilter который параметром принимает объект table
+*/
 export const TableGlobalFilter = () => {
   const [data] = useState(makeData(10));
   

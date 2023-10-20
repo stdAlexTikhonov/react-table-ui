@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { Table, makeData, useTable, columns } from '../../..';
 
+/*
+ * Базовый компонент таблицы
+ * Для того чтобы вывести простую таблицу достаточно задать параметры data и columns
+*/
 export const TableBasic = () => {
   const [data] = useState(makeData(20));
   

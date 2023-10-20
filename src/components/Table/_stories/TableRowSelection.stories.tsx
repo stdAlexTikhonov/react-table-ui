@@ -1,5 +1,29 @@
-import React, { useState } from 'react';
-import { Table, makeData, useTable, columns } from '../../..';
+import React, { RefObject, useRef, useState, useEffect, useMemo } from 'react';
+
+import Table, {
+  makeData,
+  useTable,
+  expandedColumns,
+  columns,
+  FilterState,
+  columnGroups,
+  columnGroupsVirtualization,
+  SortingState,
+  PaginationState,
+  columnsEn
+} from '../index';
+
+import { Formation, FormationApiResponse } from '../types';
+import { QueryClient, QueryClientProvider, useInfiniteQuery } from '@tanstack/react-query';
+import { fetchData, delay, getMultipleSelect } from '../utils';
+
+
+export default {
+  title: 'Table/Table/Stories',
+  parameters: {
+    chromatic: { disableSnapshot: true },
+  }
+};
 /*
  * Таблица с возможностью выбора строки
  * Для того чтобы включить выбор строки включите свойство enableRowSelection
@@ -8,7 +32,7 @@ import { Table, makeData, useTable, columns } from '../../..';
  * 
  * Есть возможноть контролиовать выбор через state и onRowSelectionChange
  * 
- *  - const [selection, setSelection] = useState({})
+ *  - const [selection, setSelection] = useState<RowSelectionState>({})
  * 
  *  - state: { rowSelection: selection }
  *  - onRowSelectionChange: setSelection
@@ -28,3 +52,5 @@ export const TableRowSelection = () => {
     <Table.TableComponent table={table} width={'100%'} />
   </Table.Root>
 };
+TableRowSelection.storyName = 'Таблица TableRowSelection';
+

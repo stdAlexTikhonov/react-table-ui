@@ -1,5 +1,29 @@
-import React, { useState } from 'react';
-import { Table, makeData, useTable, columns } from '../../..';
+import React, { RefObject, useRef, useState, useEffect, useMemo } from 'react';
+
+import Table, {
+  makeData,
+  useTable,
+  expandedColumns,
+  columns,
+  FilterState,
+  columnGroups,
+  columnGroupsVirtualization,
+  SortingState,
+  PaginationState,
+  columnsEn
+} from '../index';
+
+import { Formation, FormationApiResponse } from '../types';
+import { QueryClient, QueryClientProvider, useInfiniteQuery } from '@tanstack/react-query';
+import { fetchData, delay, getMultipleSelect } from '../utils';
+
+
+export default {
+  title: 'Table/Table/Stories',
+  parameters: {
+    chromatic: { disableSnapshot: true },
+  }
+};
 
 /*
  * Таблица с объединением ячеек по вертикали
@@ -32,3 +56,5 @@ export const TableCompound = () => {
     <Table.TableComponent table={table} width={1500} height={500} />
   </Table.Root>
 };
+TableCompound.storyName = 'Таблица TableCompound';
+

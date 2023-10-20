@@ -1,5 +1,29 @@
-import React, { useState } from 'react';
-import { Table, makeData, useTable, columnGroupsVirtualization } from '../../..';
+import React, { RefObject, useRef, useState, useEffect, useMemo } from 'react';
+
+import Table, {
+  makeData,
+  useTable,
+  expandedColumns,
+  columns,
+  FilterState,
+  columnGroups,
+  columnGroupsVirtualization,
+  SortingState,
+  PaginationState,
+  columnsEn
+} from '../index';
+
+import { Formation, FormationApiResponse } from '../types';
+import { QueryClient, QueryClientProvider, useInfiniteQuery } from '@tanstack/react-query';
+import { fetchData, delay, getMultipleSelect } from '../utils';
+
+
+export default {
+  title: 'Table/Table/Stories',
+  parameters: {
+    chromatic: { disableSnapshot: true },
+  }
+};
 /*
  * Таблица с группировкой колонок и включеной виртуализацией
  * В конфигурации колонок у каждой колонки можно задать свойство columns которое так же принимает массив колонок.
@@ -41,3 +65,5 @@ export const TableGroupsVirtualization = () => {
     <Table.TableComponent table={table} height={500} width={1500} />
   </Table.Root>
 };
+TableGroupsVirtualization.storyName = 'Таблица TableGroupsVirtualization';
+

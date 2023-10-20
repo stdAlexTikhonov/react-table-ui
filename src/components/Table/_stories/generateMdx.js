@@ -10,32 +10,35 @@ const getFile = (filename) => {
   const lines = file.split('\n');
 
   const filtered = lines.filter(line => {
-    return !line.startsWith('import')
+    return line.includes('*')
   });
 
-  return filtered.join('\n');
+  const sliced = filtered.slice(1, -1);
+
+  const transformed = sliced.map((item, index) => index === 0 ? '###' + item.replace('*', '') + '\n' : item.replace('*', ''))
+
+  return transformed.join('\n');
 }
 
 const getBase = (filename) => fs.readFileSync(path.join(__dirname, filename), {encoding: 'utf-8'});
 
 fs.readdir('../examples', (err, files) => {
 
+  let res = getBase('mdxHeader.txt');
   if (err) console.log(err)
   else {
     files.forEach(file => {
       if (file !== 'index.ts') {
-        let res = getBase('storyHeader.txt');
-        res += '\n';
+        res += '\n\n';
         res += getFile(basePath + file + '/index.tsx');
-        res += `\n${file}.storyName = 'Таблица ${file}';\n\n`;
-        fs.writeFile(`${file}.stories.tsx`, res, (err) => {
-          if (err) console.log(err);
-          console.log(`Successfully Written to ${file}.stories.tsx.`);
-        });
       }
     });
   }
 
+  fs.writeFile(`Table.stories.mdx`, res, (err) => {
+    if (err) console.log(err);
+    console.log(`Successfully Written to Table.stories.mdx`);
+  });
 
 
 });

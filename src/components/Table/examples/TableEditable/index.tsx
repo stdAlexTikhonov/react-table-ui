@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 import { Table, makeData, useTable, columns } from '../../..';
 
+/*
+ * Таблица с редактируемыми полями
+ * Для включения возможности изменения, выделения, копирования и вставки укажите meta свойство editable
+ * 
+ * Пример:
+ *  - meta: { editable: true }
+*/
 export const TableEditable = () => {
   const [data] = useState(makeData(50));
   

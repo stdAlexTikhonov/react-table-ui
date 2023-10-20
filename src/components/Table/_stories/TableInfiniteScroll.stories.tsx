@@ -1,49 +1,29 @@
-import React, { useRef, useState, useMemo, useEffect, RefObject } from 'react';
-import { Table } from '../../..';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useTable, columns, columnsEn } from '../../..';
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { PaginationState, SortingState } from '@tanstack/react-table';
-import { fetchData } from '../../utils';
-import { FormationApiResponse } from '../../types';
+import React, { RefObject, useRef, useState, useEffect, useMemo } from 'react';
 
-/*
- * Таблица с динамической подгрузкой
- * 
- * Данный пример реализован с применением библиотеки @tanstack/react-query
- *
- * Взаимодействие таблицы и хука useInfiniteQuery происходит через:
- *  - ref ссылку на компонент таблицы
- *  - контролируемое состояние SortingState
- *  - контролируемое состояние PaginationState
- *  - метод onScroll компонента таблицы
- *  - enableRowVirtualization: true
- *  - pageCount
- * 
- * 
- * Пример минимальной конфигурации:
- *  columns: columns
- *  state: {
- *    sorting,
- *    pagination
- *  },
- *  pageCount,
- *  onSortingChange: setSorting,
- *  onPaginationChange: setPagination,
- *  data: flatData,
- *  meta: {
- *    enableRowVirtualization: true,
- *  }
- * 
- * Параметры которые необходимо передать в Table.Component
- *  - onScroll
- *  - ref
- *  - loading
- * 
- * 
- * Смотрите в примере
- * 
-*/
+import Table, {
+  makeData,
+  useTable,
+  expandedColumns,
+  columns,
+  FilterState,
+  columnGroups,
+  columnGroupsVirtualization,
+  SortingState,
+  PaginationState,
+  columnsEn
+} from '../index';
+
+import { Formation, FormationApiResponse } from '../types';
+import { QueryClient, QueryClientProvider, useInfiniteQuery } from '@tanstack/react-query';
+import { fetchData, delay, getMultipleSelect } from '../utils';
+
+
+export default {
+  title: 'Table/Table/Stories',
+  parameters: {
+    chromatic: { disableSnapshot: true },
+  }
+};
 
 const queryClient = new QueryClient();
 
@@ -163,6 +143,43 @@ const InnerTable = () => {
   </>
 };
 
+/*
+ * Таблица с динамической подгрузкой
+ * 
+ * Данный пример реализован с применением библиотеки @tanstack/react-query
+ *
+ * Взаимодействие таблицы и хука useInfiniteQuery происходит через:
+ *  - ref ссылку на компонент таблицы
+ *  - контролируемое состояние SortingState
+ *  - контролируемое состояние PaginationState
+ *  - метод onScroll компонента таблицы
+ *  - enableRowVirtualization: true
+ *  - pageCount
+ * 
+ *  Пример минимальной конфигурации:
+ *  columns: columns
+ *  state: {
+ *    sorting,
+ *    pagination
+ *  },
+ *  pageCount,
+ *  onSortingChange: setSorting,
+ *  onPaginationChange: setPagination,
+ *  data: flatData,
+ *  meta: {
+ *    enableRowVirtualization: true,
+ *  }
+ * 
+ *  <Table.TableComponent
+ *    table={table}
+ *    loading={isLoading}
+ *    ref={tableContainerRef}
+ *    onScroll={(e) => { void fetchMoreOnBottomReached(e.currentTarget) }}
+ *  />
+*/
 export const TableInfiniteScroll = () => <QueryClientProvider client={queryClient}>
   <InnerTable />
 </QueryClientProvider>;
+
+TableInfiniteScroll.storyName = 'Таблица TableInfiniteScroll';
+
