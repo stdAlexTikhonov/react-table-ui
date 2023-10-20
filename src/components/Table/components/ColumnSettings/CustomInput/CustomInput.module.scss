@@ -1,0 +1,35 @@
+$shadow-color: var(--primary-blue-100);
+$shadow-color-dark: var(--primary-blue-900);
+
+.inputStyle {
+  width: 100%;
+}
+
+.root {
+  position: relative;
+}
+
+.helper {
+  width: 100%;
+  position: absolute;
+  top: 50px;
+  max-height: 700px;
+  overflow: auto;
+  z-index: 5;
+  background-color: var(--white);
+  box-shadow: 0px 0px 2px $shadow-color-dark, 0px 0px 10px $shadow-color;
+}
+
+.item {
+  cursor: pointer;
+  box-sizing: border-box;
+  user-select: none;
+  height: 60px;
+  padding: 0 1em;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  &:hover {
+    background-color: $shadow-color;
+  }
+}

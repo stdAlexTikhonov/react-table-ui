@@ -1,0 +1,284 @@
+import {
+  Meta,
+  Source,
+  Story
+} from '@storybook/addon-docs';
+
+<Meta
+  title="Table/Table/Overview"
+  parameters={{
+    design: {
+      type: 'figma',
+      url: 'https://www.figma.com/file/Vp0QCIYWhOb4zHMUsiMskE/DS2.0-Table?node-id=101%3A52228&t=65Qn53DlL4cKr5R0-0'
+    },
+    jest: ['Table.test.tsx']
+  }}
+/>
+
+# Table
+
+
+### Объект Table
+
+Объект <b>Table</b> это объект конфигурации таблицы. Этот объект можно создать руками, так же можно воспользоваться хуком `useTable`. В случае использования хука минимальное необходимые свойства которые нужно передать в объект: columns - колонки; data - строки; Формат этих параметров смотрите далее в разделе - <b>Пример генерации данных</b>.
+
+<Source
+  dark
+  code={`
+const table = useTable({ data, columns });
+  `}
+/>
+
+### Пример генерации данных
+
+Данные из примера будут применяться далее для демонстрации всех возможностей компонента
+
+<Source
+  dark
+  code={`
+export enum Status {
+  FORMING = 'формирование',
+  PRODUCED = 'предъявлено',
+  CERTIFIED = 'выпущен сертификат'
+}\n
+export type Formation = {
+  formationNum: number,
+  brigadier: string,
+  shift: number,
+  visits: number,
+  progress: string,
+  status: Status,
+  subRows?: Formation[]
+};\n
+export const columns = [
+  { accessorKey: 'formationNum' },
+  { accessorKey: 'brigadier' },
+  { accessorKey: 'shift' },
+  { accessorKey: 'visits' },
+  { accessorKey: 'status' },
+  { accessorKey: 'progress' }
+];\n
+const brigadiers = [ 'Иванов Крилл Федорович', 'Петров Семён Олегович', 'Олегов Борис Петрович',
+'Федоров Сергей Иванович', 'Суркова Ольга Ивановна', 'Сергев Фёдор Кириллович',
+ 'Борисов Олег Семёнович', 'Семёнов Пётр Босрисович', 'Кириллов Иван Сергеевич' ];\n
+const numGenerate = (num: number) => Math.floor(Math.random() \* num) + 1;\n
+const newFormation = (): Formation => ({
+  formationNum: numGenerate(100),
+  brigadier: brigadiers[numGenerate(8)],
+  shift: numGenerate(40),
+  visits: numGenerate(1000),
+  progress: numGenerate(100).toFixed(2),
+  status: [Status.FORMING, Status.PRODUCED, Status.CERTIFIED][numGenerate(2)]
+});
+\n
+export const makeData = (len: number) => {
+  return Array(len)
+    .fill(0)
+    .map((): Formation => {
+      return {
+        ...newFormation()
+      };
+    });
+};
+`}
+/>
+
+### Таблица по умолчанию
+
+<Source
+  dark
+  code={`
+export const Example = () => {
+  const data = makeData(5);
+  const table = useTable<Formation>({ data, columns });
+  return (
+    <Table.Root>
+      <Table.TableComponent table={table} />
+    </Table.Root>
+  );
+}
+`}
+/>
+
+### Footer
+
+Для того чтобы включить футер, укажите в мета параметрах { ... enableFooter: true ...}. Контент который будет показываться в конкретной ячейке футера определяется вместе с колонками через параметр `footer:`, пример определения выше. Разработан базовый компонент `FooterCell` - по умолчанию он выводит сумму всех значений числовой колонки. Доступен через `Table.FooterCell`.
+
+<Source
+  dark
+  code={`
+const table = useTable({ ... meta: { ... enableFooter: true }});
+
+<Table.Root>
+  <Table.TableComponent table={table} />
+</Table.Root>
+`}
+/>
+
+### Table.RowSelection
+
+Включает в таблице возможность выбора строки. { enableRowSelection: true }
+
+<Source
+  dark
+  code={`
+<Table.Root>
+  <Table.TableComponent table={table} />
+</Table.Root>
+`}
+/>
+
+### Таблица с множественным выбором
+
+ { enableMultiRowSelection: true }
+
+<Source
+  dark
+  code={`
+<Table.Root>
+  <Table.TableComponent table={table} />
+</Table.Root>
+`}
+/>
+
+
+### Table.Editable + Выбор диапазона ячеек (копировать/вставить)
+
+Для выбора диапазона ячеек зажмите курсор над ячейкой, переместите мышь до другой, и отпустите клавишу. Ячейки подсвеченые зелёным входят в диапазон. Выбор диапазона ячеек работает по умолчанию во всех таблицах.
+
+Для того чтобы скопировать выбранный диапазон, зажмите правую кнопку мыши и выберите "Копировать" - данные скопируются в буфер; Для того чтобы вставить - пункт меню "Вставить" соответственно.
+
+<Source
+  dark
+  code={`
+const [data, setData] = useState(makeData(5));\n
+const table = useTable<Formation>({
+  ...
+  data: data,
+  meta: { updateData: setData, editable: true }
+});\n
+<Table.Root>
+  <Table.TableComponent table={table} />
+</Table.Root>
+`}
+/>
+
+### Table.Pagination
+
+<Source
+  dark
+  code={`
+const table = useTable<Formation>({
+  ...
+  mata: {
+    ...
+    pagination: true
+  }
+});\n
+<Table.Root>
+  <Table.TableComponent table={table} />
+</Table.Root>
+`}
+/>
+
+### Таблица с группировкой колонок
+
+
+<Source
+  dark
+  code={`
+const columnsWithGroups = [
+  {
+    id: 'hello',
+    header: () => <span>Первый уровень</span>,
+    columns: [
+      {
+        accessorKey: 'formationNum',
+        header: 'Формировочная'
+      },
+      {
+        accessorKey: 'brigadier',
+        header: () => <span>Бригадир</span>
+      }
+    ]
+  },
+  {
+    header: 'Первый уровень',
+    columns: [
+      {
+        accessorKey: 'shift',
+        header: () => 'Смена'
+      },
+      {
+        header: 'Второй уровень',
+        columns: [
+          {
+            accessorKey: 'visits',
+            header: () => <span>Визиты</span>
+          },
+          {
+            accessorKey: 'status',
+            header: 'Статус'
+          },
+          {
+            accessorKey: 'progress',
+            header: 'Прогресс'
+          }
+        ]
+      }
+    ]
+  }
+];\n
+const table = useTable<Formation>({
+  ...
+  columns: columnsWithGroups,
+  ...
+});\n
+return (
+  <Table.Root>
+    <Table.TableComponent table={table} />
+  </Table.Root>
+);
+`}
+/>
+
+### Таблица с фильтрами по колонкам
+
+Фильтры включаются через объект конфигурации `table = { ... enableColumnFilters: true, enableGlobalFilter: true ... }`.
+
+<Source
+  dark
+  code={`
+<Table.Root>
+  <Table.TableComponent table={table} />
+</Table.Root>
+`}
+/>
+
+
+Есть возможность включить глобальный фильтр. Он добавится в тулбаре, поэтому не забываем включить тулбар.
+
+<Source
+  dark
+  code={`
+<Table.Root>
+  <div>
+    <Table.GlobalFilter />
+  </div>
+  <Table.TableComponent table={table} />
+</Table.Root>
+`}
+/>
+
+### Таблица с фильтрами по колонкам + интеграция backend
+
+Для интеграции с backend предусмотрен метод `onFilterChange`. Для работы подсказок и множественного выбора необходимо добавить асинхронный метод `loadUniqueValues` `table = { ... enableColumnFilters: true, meta: { onFilterChange: ({id, mode, value }) => { ... }, loadUniqueValues: (columnId) => Promise<...> } ... }`.
+
+<Source
+  dark
+  code={`
+<Table.Root>
+  <Table.TableComponent table={table} />
+</Table.Root>
+`}
+/>

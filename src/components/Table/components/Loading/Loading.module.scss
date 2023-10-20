@@ -1,0 +1,37 @@
+$loading-background: transparentize(#FFFFFF, 0.3);
+
+.wrapper {
+  background-color: $loading-background;
+  left: 0;
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.loader {
+  margin: auto;
+  width: var(--48-size);
+  height: var(--48-size);
+  border: var(--4-size) solid var(--primary-blue-600);
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+  .error {
+    margin: auto;
+  }
+
+  @keyframes rotation {
+  0% {
+      transform: rotate(0deg);
+  }
+  100% {
+      transform: rotate(360deg);
+  }
+  } 

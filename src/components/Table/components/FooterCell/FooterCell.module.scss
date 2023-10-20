@@ -1,0 +1,13 @@
+.cell {
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0px 16px;
+  height: 32px;
+  user-select: none;
+}
+
+.number {
+  text-align: right;
+}

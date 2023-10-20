@@ -1,0 +1,71 @@
+$border: 1px solid var(--divider-divider);
+
+html {
+  font-family: sans-serif;
+  font-size: var(--14);
+}
+
+.table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+}
+
+.overflow {
+  overflow: auto;
+  box-sizing: border-box;
+}
+
+.borderWrapper {
+  border: $border;
+}
+
+input {
+  border: none;
+}
+
+.table_wrapper {
+  display: flex;
+  justify-content: flex-start;
+  background-color: var(--assigned-colors-table-cell-default-bg);
+  &::-webkit-scrollbar-track {
+    background-color: unset /* Цвет скролла */;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--text-grey-200); /* Цвет ползунка */;
+  }
+
+  &::-webkit-scrollbar {
+    width: unset /* Толщина скролла */;
+  }
+}
+
+.left_pinned {
+  border-right: $border;
+  position: sticky;
+  left: 0;
+  top:0;
+  z-index: 2;
+}
+
+.right_pinned {
+  border-left: $border;
+  position: sticky;
+  right: 0;
+  top: 0;
+  z-index: 2;
+}
+
+.pinned_headers {
+  position: sticky;
+  left: 0;
+  top:0;
+  z-index: 1;
+  width: 0;
+}
+
+.commonWrapper {
+  overflow: hidden;
+  position: relative;
+}

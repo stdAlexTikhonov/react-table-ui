@@ -1,0 +1,51 @@
+$shadow-color: var(--primary-blue-100);
+$shadow-color-dark: var(--primary-blue-900);
+$border-color: var(--primary-blue-600);
+$found-background: var(--primary-blue-100);
+
+.item {
+  box-sizing: border-box;
+  user-select: none;
+  padding: 15px 1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--text-grey-900);
+}
+
+.found {
+  box-shadow: inset 0px 0px 2px $shadow-color-dark, inset 0px 0px 10px $shadow-color;
+  background-color: $found-background;
+}
+
+.isDragging {
+  background-color: $shadow-color;
+  border: 1px solid $border-color;
+  box-shadow: 0px 0px 2px $shadow-color-dark, 0px 0px 10px $shadow-color;
+}
+
+.columnTitle {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  flex-grow: 1;
+  text-align: left;
+  color: inherit;
+}
+
+.dragIndicator {
+  padding-right: 5px;
+  color: var(--text-grey-500);
+}
+
+.btn {
+  max-width: 30px;
+}
+
+.expandIcon {
+  min-width: 20px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 5PX;
+}

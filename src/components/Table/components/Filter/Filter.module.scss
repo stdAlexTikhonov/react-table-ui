@@ -1,0 +1,122 @@
+.wrapper {
+  display: flex;
+  width: 100%;
+  position: relative;
+  background: var(--default-second);
+  height: var(--32-size);
+  box-sizing: border-box;
+  color: var(--text-grey-400);
+}
+
+.borderBottom {
+  border-bottom: 1px solid var(--divider-divider);
+}
+
+.focused {
+  color: var(--primary-blue-600);
+}
+
+.dropdown {
+  width: var(--32-size);
+  position: relative;
+  cursor: pointer;
+  outline: none;
+  z-index: 2;
+}
+
+.paddingS {
+  padding: 0;
+}
+
+.paddingM {
+  padding: 5px 0;
+}
+
+.paddingL {
+  padding: 11px 0;
+}
+
+.select {
+  height: var(--32-size);
+  position: relative;
+  cursor: pointer;
+  outline: none;
+  z-index: 2;
+}
+
+.menu {
+  color: var(--text-grey-900);
+  box-shadow: 0px 2px 8px 0px var(--text-grey-500);
+  width: 256px;
+  padding: 8px 0;
+  margin: 8px 0;
+  background: var(--white);
+  position: fixed;
+  z-index: 3;
+  max-height: 300px;
+  overflow: auto;
+  background: var(--default-second);
+  &::-webkit-scrollbar-track {
+    background-color: unset /* Цвет скролла */;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--text-grey-200); /* Цвет ползунка */;
+  }
+
+  &::-webkit-scrollbar {
+    width: unset /* Толщина скролла */;
+  }
+}
+
+.item {
+  padding: 4px 8px 4px 12px;
+  display: flex;
+  font-family: PT Root UI;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 22px;
+  letter-spacing: 0em;
+  text-align: left;
+  align-items: center;
+  &:hover {
+    background-color: var(--assigned-colors-table-cell-hover-bg);
+  }
+}
+
+.icon {
+  min-width: 24px;
+  margin-right: 10px;
+}
+
+.selected {
+  background-color: var(--assigned-colors-table-cell-selected-bg);
+}
+
+.title {
+  margin-right: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.clearIcon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-right: 8px;
+  cursor: pointer;
+}
+
+.badge {
+  position: absolute;
+  left: 20px;
+}
+
+.underline {
+  color: var(--primary-blue-600);
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  border-bottom: 2px solid;
+}

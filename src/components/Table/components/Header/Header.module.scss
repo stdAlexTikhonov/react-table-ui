@@ -1,0 +1,116 @@
+.cell {
+  font-size: var(--14);
+  font-weight: 500;
+  color: var(--assigned-colors-table-tabletop-text-default);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  z-index: 1;
+  top: 0;
+  padding: 0;
+  position: sticky;
+  cursor: default;
+  user-select: none;
+}
+
+.thead {
+  background-color: var(--assigned-colors-table-tabletop-bg-default);
+  z-index: 1;
+  top: 0;
+  position: sticky;
+  &:hover {
+    background-color: var(--assigned-colors-table-tabletop-bg-hover);
+  }
+}
+
+.border {
+  border-left: 1px solid var(--divider-divider);
+}
+
+.wrapperCell {
+  height: var(--32-size);
+  box-sizing: border-box;
+}
+
+.withFilter {
+  height: var(--64-size);
+}
+
+.innerCell {
+  display: flex;
+  position: relative;
+}
+
+.borderBottom {
+  border-bottom: 1px solid var(--divider-divider);
+}
+
+.resizer {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 5px;
+  background: var(--text-grey-500);
+  cursor: col-resize;
+  z-index: 3;
+  user-select: none;
+  touch-action: none;
+  opacity: 0;
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.isResizing {
+  background: var(--primary-main);
+  opacity: 1;
+}
+
+.text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: 0;
+}
+
+.textPaddingS {
+  padding: 4px 8px;
+}
+
+.textPaddingM {
+  padding: 9px 8px;
+}
+
+.textPaddingL {
+  padding: 18px 8px;
+}
+
+.dargIcon {
+  top: 0;
+  display: flex;
+  position: absolute;
+  font-size: 19px;
+  right: 7px;
+  cursor: grab;
+  height: 100%;
+}
+
+.active {
+  &:hover {
+    color: var(--primary-blue-600);
+  }
+}
+
+.sortIcon {
+  display: flex;
+  min-width: var(--16-size);
+  align-items: center;
+}
+
+.underline {
+  color: var(--primary-blue-600);
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  border-bottom: 2px solid;
+}

@@ -1,0 +1,45 @@
+.root {
+  width: 100%;
+  overflow: auto;
+  background-color: var(--assigned-colors-table-tabletop-bg-default);
+  &::-webkit-scrollbar {
+    display: none !important;
+  }
+}
+
+.relative {
+  position: relative;
+}
+
+.cell {
+  height: var(--32-size);
+  box-sizing: border-box;
+  line-height: var(--18);
+  font-size: var(--14);
+  font-weight: var(--body2-medium-font-weight);
+  color: var(--assigned-colors-table-tabletop-text-default);
+  background-color: var(--assigned-colors-table-tabletop-bg-default);
+  cursor: default;
+  user-select: none;
+  padding: 0px 8px;
+}
+
+.border {
+  border-left: 1px solid var(--divider-divider);
+}
+
+.borderBottom {
+  border-bottom: 1px solid var(--divider-divider);
+}
+
+.textPaddingS {
+  padding: 4px 8px;
+}
+
+.textPaddingM {
+  padding: 9px 8px;
+}
+
+.textPaddingL {
+  padding: 18px 8px;
+}

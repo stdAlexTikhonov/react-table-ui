@@ -1,0 +1,30 @@
+.menu-item {
+  background: var(--background-default);
+  font-size: var(--16-size);
+  font-weight: 300;
+  padding: var(--8-space);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 170px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--background-info);
+  }
+}
+
+.label {
+  color: var(--text-grey-900);
+}
+
+.hint {
+  font-size: var(--12-space);
+  color: var(--text-grey-500);
+}
+
+.menu {
+  position: fixed;
+  box-shadow: 0 0 var(--4-size) var(--text-grey-500);
+  z-index: 999;
+}
