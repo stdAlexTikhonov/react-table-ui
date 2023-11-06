@@ -1,6 +1,8 @@
-export type Column = `Col-${number}`;
+import { ColumnDef } from "@tanstack/react-table";
+type Column = `Col-${number}`;
 export type Row = Record<Column, number>;
-export type Data = {
-    columns: Column[];
-    data: Row[];
+export type Data<T> = {
+    columns: ColumnDef<T>[];
+    data: T[];
 };
+export {};
