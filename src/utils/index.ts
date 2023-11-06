@@ -4,7 +4,7 @@ import { Row, Data } from './types';
 const numGenerate = (num: number) => Math.floor(Math.random() * num) + 1;
 
 const makeBaseColumn = (_: number, num: number): ColumnDef<Row> => ({
-    id: `Col-${num}`
+    accessorKey: `Col-${num}`
 });
 
 export const makeColumn = <T>(column: ColumnDef<T>, options: ColumnDef<T>): ColumnDef<T> => ({
