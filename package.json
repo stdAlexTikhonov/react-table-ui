@@ -27,5 +27,8 @@
   },
   "files": [
     "dist"
-  ]
+  ],
+  "dependencies": {
+    "@tanstack/react-table": "^8.10.7"
+  }
 }
