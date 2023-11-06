@@ -4,7 +4,8 @@
   "description": "easy-to-use react-table ui library",
   "main": "./dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
   },
   "homepage": "https://github.com/stdAlexTikhonov/react-tanstack-table-ui",
   "keywords": [],
@@ -27,5 +28,8 @@
   },
   "files": [
     "dist"
-  ]
+  ],
+  "dependencies": {
+    "@tanstack/react-table": "^8.10.7"
+  }
 }
