@@ -2,10 +2,11 @@ import React from 'react';
 import { flexRender } from '@tanstack/react-table';
 import { IProps } from './types'
 
+import styles from './Table.module.scss';
+
 export const Table = <T,>({ table }: IProps<T>) => {
   const headers = table.getHeaderGroups();
-  console.log(headers);
-  return <table>
+  return <table className={styles.table}>
     <thead>
       {table.getHeaderGroups().map(headerGroup => (
         <tr key={headerGroup.id}>
